@@ -1,0 +1,51 @@
+package com.example.data
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface HabitDao {
+    @Query("SELECT * FROM habits ORDER BY id ASC")
+    fun getAllHabits(): Flow<List<HabitEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHabit(habit: HabitEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHabits(habits: List<HabitEntity>)
+
+    @Update
+    suspend fun updateHabit(habit: HabitEntity)
+
+    @Delete
+    suspend fun deleteHabit(habit: HabitEntity)
+
+    @Query("DELETE FROM habits WHERE id = :id")
+    suspend fun deleteHabitById(id: Long)
+
+    @Query("SELECT * FROM habit_completions WHERE date = :date")
+    fun getCompletionsForDate(date: String): Flow<List<HabitCompletionEntity>>
+
+    @Query("SELECT * FROM habit_completions")
+    fun getAllCompletions(): Flow<List<HabitCompletionEntity>>
+
+    @Query("SELECT * FROM habit_completions WHERE habitId = :habitId")
+    fun getCompletionsForHabit(habitId: Long): Flow<List<HabitCompletionEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCompletion(completion: HabitCompletionEntity)
+
+    @Query("DELETE FROM habit_completions WHERE habitId = :habitId AND date = :date")
+    suspend fun deleteCompletion(habitId: Long, date: String)
+
+    @Query("DELETE FROM habit_completions WHERE date = :date")
+    suspend fun deleteAllCompletionsForDate(date: String)
+
+    @Query("DELETE FROM habit_completions WHERE habitId = :habitId")
+    suspend fun deleteAllCompletionsForHabit(habitId: Long)
+}

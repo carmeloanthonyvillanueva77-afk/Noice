@@ -1,0 +1,6 @@
+{
+  "name": "HabitFlow",
+  "description": "Daily habit tracker with a Forest Calm aesthetic, streak tracking, and daily progress.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
